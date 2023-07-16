@@ -9,6 +9,7 @@ const connectDB = require("./config/db");
 dotenv.config();
 
 const userRoute = require("./routes/userRouter");
+const blogRoutes = require("./routes/blogRoutes");
 // DB connection
 
 connectDB();
@@ -22,6 +23,7 @@ app.use(morgan("dev"));
 
 // creating routes
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/blog", blogRoutes);
 // app.get("/", (req, res) => {
 //   res.status(200).send({
 //     message: "node server",
