@@ -1,18 +1,34 @@
+const mongoose = require("mongoose");
 const blogModel = require("../Models/blogModel");
+const User = require("../Models/userModel");
 // create blog
 exports.createBlog = async (req, res) => {
   try {
-    const { title, description, image } = req.body;
+    const { title, description, image, user } = req.body;
     console.log(title);
     console.log(description);
     console.log(image);
-    if (!title || !description || !image) {
+    if (!title || !description || !image || user) {
       return res.status(500).json({
         success: false,
         message: "please provide all fields",
       });
     }
-    const newBlog = new blogModel({ title, description, image });
+    const existingUser = await User.findById(user);
+    if (!existingUser) {
+      return res.status(404).json({
+        success: true,
+        message: "unable to find user",
+      });
+    }
+    console.log(existingUser, "value in existing user--------");
+    const newBlog = new blogModel({ title, description, image, user });
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    await newBlog.save({ session });
+    existingUser.blogs.push(newBlog);
+    await existingUser.save({ session });
+    await session.commitTransaction();
     await newBlog.save();
     return res.status(400).json({
       success: true,

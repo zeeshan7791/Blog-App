@@ -1,10 +1,10 @@
-const userModel = require("../Models/userModel");
+const User = require("../Models/userModel");
 const bcrypt = require("bcrypt");
 // get all user
 
 exports.getAllUser = async (req, res) => {
   try {
-    const allUser = await userModel.find();
+    const allUser = await User.find();
     return res.status(200).json({
       userCount: allUser.length,
       success: true,
@@ -28,7 +28,7 @@ exports.regUser = async (req, res) => {
         message: "please enter credentials",
       });
     }
-    const existingUser = await userModel.findOne({ email: email });
+    const existingUser = await User.findOne({ email: email });
     if (existingUser) {
       return res.status(401).json({
         success: false,
@@ -38,7 +38,7 @@ exports.regUser = async (req, res) => {
     const hashPassword = await bcrypt.hash(password, 10);
     // saving user
     // const user= new userModel({username,email,password}).save
-    const user = new userModel({ username, email, password: hashPassword });
+    const user = new User({ username, email, password: hashPassword });
     await user.save();
     return res.status(200).json({
       sucess: true,
@@ -64,7 +64,7 @@ exports.loginUser = async (req, res) => {
         message: "please provide email or password",
       });
     }
-    const user = await userModel.findOne({ email });
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(200).json({
         success: false,
