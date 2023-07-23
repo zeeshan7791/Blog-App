@@ -5,6 +5,7 @@ const {
   updateBlog,
   getBlogbyId,
   deleteBlog,
+  getUserBlog,
 } = require("../controllers/blogContoller");
 const router = express.Router();
 // routes
@@ -18,5 +19,7 @@ router.put("/update-blog/:id", updateBlog);
 router.get("/single-blog/:id", getBlogbyId);
 // delete blog
 router.delete("/delete-blog/:id", deleteBlog);
+// getUserBlog
+router.get("/user-blog/:id", getUserBlog);
 
 module.exports = router;

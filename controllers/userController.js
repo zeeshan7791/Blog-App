@@ -41,7 +41,7 @@ exports.regUser = async (req, res) => {
     const user = new User({ username, email, password: hashPassword });
     await user.save();
     return res.status(200).json({
-      sucess: true,
+      success: true,
       message: "register successfully",
       user,
     });

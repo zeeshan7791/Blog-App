@@ -1,11 +1,10 @@
 const express = require("express");
-const cors = require("cors");
 const morgan = require("morgan");
 const colors = require("colors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
-
 // dotenv.config({path:"./path name" }); if dotenv is in anther folder
+const cors = require("cors");
 dotenv.config();
 
 const userRoute = require("./routes/userRouter");

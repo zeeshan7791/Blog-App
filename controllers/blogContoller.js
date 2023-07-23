@@ -8,7 +8,7 @@ exports.createBlog = async (req, res) => {
     console.log(title);
     console.log(description);
     console.log(image);
-    if (!title || !description || !image || user) {
+    if (!title || !description || !image || !user) {
       return res.status(500).json({
         success: false,
         message: "please provide all fields",
@@ -46,7 +46,7 @@ exports.createBlog = async (req, res) => {
 // get all blog
 exports.getAllBlogs = async (req, res) => {
   try {
-    const allBlog = await blogModel.find({});
+    const allBlog = await blogModel.find({}).populate("user");
     if (allBlog.length < 0) {
       return res.status(500).json({
         success: false,
@@ -117,10 +117,39 @@ exports.getBlogbyId = async (req, res) => {
     });
   }
 };
+// getUserBlog
+exports.getUserBlog = async (req, res) => {
+  try {
+    console.log(req.params.id, "val in id");
+    const userBlog = await User.findById(req.params.id).populate("blogs");
+    if (!userBlog) {
+      return res.status(404).send({
+        success: false,
+        message: "blogs not found with this id",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "user blog",
+      userBlog,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: "Error in getting user blog",
+      error,
+    });
+  }
+};
 // delete blog
 exports.deleteBlog = async (req, res) => {
   try {
-    await blogModel.findByIdAndDelete(req.params.id);
+    const blog = await blogModel
+      // .findOneAndDelete(req.params.id)
+      .findByIdAndDelete(req.params.id)
+      .populate("user");
+    await blog.user.blogs.pull(blog);
+    await blog.user.save();
     return res.status(400).json({
       success: true,
       message: "Blog deleted successfully",
