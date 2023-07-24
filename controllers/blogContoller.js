@@ -30,7 +30,7 @@ exports.createBlog = async (req, res) => {
     await existingUser.save({ session });
     await session.commitTransaction();
     await newBlog.save();
-    return res.status(400).json({
+    return res.status(200).json({
       success: true,
       message: "new blog created",
       newBlog,
@@ -77,14 +77,14 @@ exports.updateBlog = async (req, res) => {
       { ...req.body },
       { new: true }
     );
-    return res.status(200).json({
+    return res.status(200).send({
       success: true,
       message: "Blog Updated!",
       blog,
     });
   } catch (error) {
     console.log(error);
-    return res.status(400).json({
+    return res.status(400).send({
       success: false,
       message: "Error WHile Updating Blog",
       error,
@@ -103,7 +103,7 @@ exports.getBlogbyId = async (req, res) => {
         message: "blog doesnot exist with id",
       });
     }
-    return res.status(400).json({
+    return res.status(200).json({
       success: true,
       message: "single blog",
       blog,

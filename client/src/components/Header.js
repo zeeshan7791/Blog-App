@@ -11,6 +11,8 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { authActions } from "./redux/store";
+import toast from "react-hot-toast";
+
 const Header = () => {
   //global state
   const isLogin = useSelector((state) => state.isLogin);
@@ -21,8 +23,9 @@ const Header = () => {
   const handleLogout = () => {
     try {
       dispatch(authActions.logout());
-      alert("logout successfully");
+      toast.success("logout successfully");
       navigate("/login");
+      localStorage.clear();
     } catch (error) {
       console.log(error);
     }
@@ -41,6 +44,11 @@ const Header = () => {
               >
                 <Tab label="Blogs" LinkComponent={Link} to="/blogs" />
                 <Tab label="My Blogs" LinkComponent={Link} to="/my-blogs" />
+                <Tab
+                  label="Create Blog"
+                  LinkComponent={Link}
+                  to="/create-blog"
+                />
               </Tabs>
             </Box>
           )}

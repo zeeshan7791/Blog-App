@@ -6,7 +6,8 @@
 body {
   font-family: "roboto", sans-serif;
 }
-.spinner {
+.spinner,
+.emptyBlog {
   height: 60vh;
   display: flex;
   justify-content: center;
